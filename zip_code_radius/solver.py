@@ -55,7 +55,21 @@ def solve_using_set_and_tree(radius, in_miles=True, split_median=True):
     results = []
     while len(zip_codes) > 0:
         z = zip_codes.pop()
-        zip_codes.difference_update(tree.search(z, radius, in_miles))
-        results.append(z)
+        if zip_lookup_good(z):
+            zip_codes.difference_update(tree.search(z, radius, in_miles))
+            results.append(z)
+        else:
+            next
     return results
+
+def zip_lookup_good(zip_code)
+    url = "http://maps.googleapis.com/maps/api/geocode/json?address={0}}&sensor=false"
+    response = requests.get(url.format(zip_code))
+    json_response = json.loads(response.text)
+    if (isinstance(json_response, dict) and ('status' in json_response) and (json_response['status'] == 'ZERO_RESULTS')):
+        print('bad zip')
+        return false
+    else:
+        print('good zip')
+        return true
 
